@@ -10,7 +10,12 @@ contract SimpleAuction{
     mapping(address=>uint) public pendingReturns;
     bool public started;
     bool public ended;
-
+    
+    modifier notVendor(){
+        require(msg.sender!=vendor, "Access Denied");
+        _;
+    }
+    
     modifier onlyVendor(){
         require(msg.sender==vendor, "Access Denied!");
         _;
@@ -31,7 +36,7 @@ contract SimpleAuction{
 
     }
 
-    function bid() public payable{
+    function bid() public payable notVendor{
         require(started, "not started");
         if(block.timestamp > auctionEndTime){
             revert("The auction had already ended");
