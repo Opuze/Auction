@@ -23,12 +23,8 @@ contract SimpleAuction{
       event HighestBidIncrease(address bidder, uint amount);
       event AuctionEnded(address winner, uint amount);
 
-    constructor(address payable _vendor){
+    function start(address payable _vendor) public{
         vendor = _vendor;
-
-    }
-
-    function start() public onlyVendor{
         require(!started, "started");
         started = true;
         ended = false;
@@ -82,5 +78,8 @@ contract SimpleAuction{
 
         vendor.transfer(highestBid);
         highestBid=0;
+        delete highestBidder;
     }
+    function getBalance() public view returns(uint){
+        return address(this).balance;
 }
